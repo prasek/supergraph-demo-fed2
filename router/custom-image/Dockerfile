@@ -6,9 +6,12 @@ RUN apt-get update && apt-get install -y \
 
 WORKDIR /dist
 
-COPY ./router.rhai .
+COPY ./rhai ./rhai
 
-RUN curl -ssL https://router.apollo.dev/download/nix/latest | sh
+COPY ./install.sh .
+RUN ./install.sh v0.12.1-alpha-defer2 x86_64-linux ./router 0.12.0
+#RUN curl -ssL https://router.apollo.dev/download/nix/latest | sh -s -- v0.12.0-alpha-defer2
+
 
 # for faster docker shutdown
 STOPSIGNAL SIGINT

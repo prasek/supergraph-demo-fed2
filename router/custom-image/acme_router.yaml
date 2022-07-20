@@ -14,8 +14,10 @@ telemetry:
       protocol: grpc
       timeout: 42s
 
-plugins:
-  experimental.rhai:
-    # Currently there can only be a single rhai file.  If there are multiple
-    # customizations, keep them all in a single file.
-    filename: "/dist/router.rhai"
+rhai:
+  # Currently there can only be a single rhai file.  If there are multiple
+  # customizations, keep them all in a single file.
+  main: "router.rhai"
+
+server:
+  experimental_defer_support: true
