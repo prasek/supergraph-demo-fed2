@@ -2,7 +2,7 @@
 
 PORT="${1:-4000}"
 COUNT="${2:-1}"
-TESTS=(1 2 3 4 5)
+TESTS=(1 2 3 4 5 6 7)
 
 # --------------------------------------------------------------------
 # TEST 1
@@ -143,6 +143,51 @@ read -r -d '' EXP_5 <<"EOF"
 {"data":{"allProducts":[{"id":"apollo-federation","sku":"federation","dimensions":{"size":"1","weight":1},"delivery":{"estimatedDelivery":"6/25/2021","fastestDelivery":"6/24/2021"},"reviewsScore":4.6,"reviews":[{"body":"A review for Apollo Federation"}]},{"id":"apollo-studio","sku":"studio","dimensions":{"size":"1","weight":1},"delivery":{"estimatedDelivery":"6/25/2021","fastestDelivery":"6/24/2021"},"reviewsScore":4.6,"reviews":[{"body":"A review for Apollo Studio"}]}]}}
 EOF
 
+# --------------------------------------------------------------------
+# TEST 6
+# --------------------------------------------------------------------
+DESCR_6="deprecatedQuery"
+OPNAME_6="deprecatedQuery"
+read -r -d '' QUERY_6 <<"EOF"
+{
+ allProducts {
+   id,
+   sku,
+   oldField
+ }
+}
+EOF
+
+OP_6=equals
+
+read -r -d '' EXP_6 <<"EOF"
+{"data":{"allProducts":[{"id":"apollo-federation","sku":"federation","oldField":"deprecated"},{"id":"apollo-studio","sku":"studio","oldField":"deprecated"}]}}
+EOF
+
+# --------------------------------------------------------------------
+# TEST 7
+# --------------------------------------------------------------------
+DESCR_7="deprecatedIntrospectionQuery"
+OPNAME_7="deprecatedIntrospectionQuery"
+read -r -d '' QUERY_7 <<"EOF"
+{
+  __schema {
+    types {
+      fields(includeDeprecated: true) {
+        name,
+        isDeprecated,
+        deprecationReason
+      }
+    }
+  }
+}
+EOF
+
+OP_7=contains
+
+read -r -d '' EXP_7 <<"EOF"
+{"name":"oldField","isDeprecated":true,"deprecationReason":"refactored out"}
+EOF
 
 set -e
 

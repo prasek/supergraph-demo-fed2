@@ -20,8 +20,8 @@ const { readFileSync } = require('fs');
 const port = process.env.APOLLO_PORT || 4000;
 
 const products = [
-    { id: 'apollo-federation', sku: 'federation', package: '@apollo/federation', variation: "OSS" },
-    { id: 'apollo-studio', sku: 'studio', package: '', variation: "platform" },
+    { id: 'apollo-federation', sku: 'federation', package: '@apollo/federation', variation: "OSS", oldField: "deprecated" },
+    { id: 'apollo-studio', sku: 'studio', package: '', variation: "platform", oldField: "deprecated" },
 ]
 const typeDefs = gql(readFileSync('./products.graphql', { encoding: 'utf-8' }));
 const resolvers = {
