@@ -44,7 +44,11 @@ class GraphQLConfiguration {
                     .fetchEntities { env: DataFetchingEnvironment ->
                         env.getArgument<List<Map<String, Any>>>("representations").map { representation ->
                             when(representation["__typename"]) {
-                                "Product" -> allProducts.firstOrNull { it.id == representation["id"] } ?: error("Product not found: $representation")
+                                "Product" -> {
+                                    // Artificial delay to simulate a slow service
+                                    Thread.sleep(4000)
+                                    allProducts.firstOrNull { it.id == representation["id"] } ?: error("Product not found: $representation")
+                                }
                                 else -> error("Unknown type: $representation")
                             }
                         }
