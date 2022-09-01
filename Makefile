@@ -85,6 +85,13 @@ docker-up-local-router-custom-main-defer-ac:
 	@sleep 4
 	@docker logs apollo-router-custom-main
 
+.PHONY: docker-up-local-router-custom-local
+docker-up-local-router-custom-local:
+	docker-compose -f docker-compose.router-custom-local.yml up -d
+	@echo "waiting for Kotlin inventory subgraph to initialize"
+	@sleep 4
+	@docker logs apollo-router-custom-local
+
 .PHONY: docker-build
 docker-build:
 	docker-compose build
@@ -123,6 +130,22 @@ docker-build-router-main-with-subgraphs-no-cache:
 .PHONY: docker-build-router-main-defer-ac
 docker-build-router-main-defer-ac:
 	docker-compose -f docker-compose.router-custom-main-defer-ac.yml build --parallel --progress plain
+
+.PHONY: docker-build-router-local
+docker-build-router-local:
+	@docker build -t supergraph-demo-fed2_apollo-router-custom-local router/custom-local/.
+
+.PHONY: docker-build-router-local-no-cache
+docker-build-router-local-no-cache:
+	@docker build -t supergraph-demo-fed2_apollo-router-custom-local router/custom-local/. --no-cache
+
+.PHONY: docker-build-router-local-with-subgraphs
+docker-build-router-local-with-subgraphs:
+	docker-compose -f docker-compose.router-custom-local.yml build --parallel --progress plain
+
+.PHONY: docker-build-router-local-with-subgraphs-no-cache
+docker-build-router-local-with-subgraphs-no-cache:
+	docker-compose -f docker-compose.router-custom-local.yml build --no-cache --parallel --progress plain
 
 .PHONY: docker-products-hot-reload
 docker-products-hot-reload:
